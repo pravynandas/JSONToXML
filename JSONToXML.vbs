@@ -59,9 +59,9 @@ Function JSONToXML(json)
       Case ":"
         value = ""
         State = stateValue
-			Case Else						'@@Enhancement#1: Handling Array values
-				Set xmlitem = dom.createTextNode(name)
-				xmlElem.appendChild(xmlitem)
+      Case Else						'@@Enhancement#1: Handling Array values
+        Set xmlitem = dom.createTextNode(name)
+	xmlElem.appendChild(xmlitem)
         State = stateRoot					
       End Select
     Case stateValue
@@ -69,10 +69,10 @@ Function JSONToXML(json)
       Case """"
         State = stateValueQuoted
       Case "{"
-        Set xmlElem = XMLCreateChild(xmlElem, "OBJECT")
+        Set xmlElem = XMLCreateChild(xmlElem, name)
         State = stateRoot
       Case "["
-        Set xmlElem = XMLCreateChild(xmlElem, "ARRAY")
+        Set xmlElem = XMLCreateChild(xmlElem, name)
         State = stateRoot
       Case " "
       Case Chr(9)
