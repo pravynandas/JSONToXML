@@ -1,11 +1,11 @@
 ' ==============================================================================================
 ' Adaptation of JSONToXML() function for enhancements and bugfixes.
 ' Author: Praveen Nandagiri (pravynandas@gmail.com)
+' Enhancement#1: Arrays are now rendered as Text Nodes
 '
 ' Credits:
 ' Visit: https://stackoverflow.com/a/12171836/1751166
 ' Author: https://stackoverflow.com/users/881441/stephen-quan
-' Bugs: has known limitations such as not handling all types of escape sequences
 ' ==============================================================================================
 Const stateRoot = 0
 Const stateNameQuoted = 1
@@ -59,6 +59,10 @@ Function JSONToXML(json)
       Case ":"
         value = ""
         State = stateValue
+			Case Else						'@@Enhancement#1: Handling Array values
+				Set xmlitem = dom.createTextNode(name)
+				xmlElem.appendChild(xmlitem)
+        State = stateRoot					
       End Select
     Case stateValue
       Select Case ch
