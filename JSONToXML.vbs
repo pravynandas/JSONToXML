@@ -2,6 +2,7 @@
 ' Adaptation of JSONToXML() function for enhancements and bugfixes.
 ' Author: Praveen Nandagiri (pravynandas@gmail.com)
 ' Enhancement#1: Arrays are now rendered as Text Nodes
+' Enhancement#2: Handled Escape characters (incl. Hex). Refer: http://www.json.org/
 '
 ' Credits:
 ' Visit: https://stackoverflow.com/a/12171836/1751166
@@ -13,11 +14,12 @@ Const stateNameFinished = 2
 Const stateValue = 3
 Const stateValueQuoted = 4
 Const stateValueQuotedEscaped = 5
-Const stateValueUnquoted = 6
-Const stateValueUnquotedEscaped = 7
+Const stateValueQuotedEscapedHex = 6
+Const stateValueUnquoted = 7
+Const stateValueUnquotedEscaped = 8
 
 Function JSONToXML(json)
-  Dim dom, xmlElem, i, ch, state, name, value
+  Dim dom, xmlElem, i, ch, state, name, value, sHex
   Set dom = CreateObject("Microsoft.XMLDOM")
   state = stateRoot
   For i = 1 to Len(json)
@@ -61,7 +63,7 @@ Function JSONToXML(json)
         State = stateValue
       Case Else						'@@Enhancement#1: Handling Array values
         Set xmlitem = dom.createTextNode(name)
-	xmlElem.appendChild(xmlitem)
+		xmlElem.appendChild(xmlitem)
         State = stateRoot					
       End Select
     Case stateValue
@@ -92,9 +94,41 @@ Function JSONToXML(json)
       Case Else
         value = value + ch
       End Select
-    Case stateValueQuotedEscaped ' @@TODO: Handle escape sequences
-      value = value + ch
-      state = stateValueQuoted
+    Case stateValueQuotedEscaped ' @@Enhancement#2: Handle escape sequences
+	  If ch = "u" Then	'Four digit hex. Ex: o = 00f8
+	  	sHex = ""
+	  	state = stateValueQuotedEscapedHex
+	  Else
+	  	Select Case ch
+	  	Case """"
+	  		value = value + """"
+	  	Case "\"
+	  		value = value + "\"
+	  	Case "/"
+	  		value = value + "/"
+	  	Case "b"	'Backspace
+	  		value = value + chr(08)
+	  	Case "f"	'Form-Feed
+	  		value = value + chr(12)
+	  	Case "n"	'New-line (LineFeed(10))
+	  		value = value + vbLF
+	  	Case "r"	'New-line (CarriageReturn/CRLF(13))
+	  		value = value + vbCR
+	  	Case "t"	'Horizontal-Tab (09)
+	  		value = value + vbTab
+	  	Case Else
+	  		'do not accept any other escape sequence
+	  	End Select
+	  	state = stateValueQuoted
+	  End If
+	Case stateValueQuotedEscapedHex
+	  sHex = sHex + ch
+	  If len(sHex) = 4 Then
+	  	on error resume next
+	  	value = value + Chr("&H" & sHex)	'Hex to String conversion
+	  	on error goto 0
+	  	state = stateValueQuoted
+	  End If
     Case stateValueUnquoted
       Select Case ch
       Case "}"
