@@ -34,7 +34,7 @@ Function JSONToXML(json)
         End If
       Case "{"
         If dom.documentElement is Nothing Then
-          Set xmlElem = dom.CreateElement("OBJECT")
+          Set xmlElem = dom.CreateElement("ROOT")
           Set dom.documentElement = xmlElem
         Else
           Set xmlElem = XMLCreateChild(xmlElem, "OBJECT")
