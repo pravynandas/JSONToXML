@@ -1,0 +1,20 @@
+{
+  "name": "JSONToXML",
+  "version": "1.0.2",
+  "description": "JSONToXML is a function adapted from below forum thread and enhanced to have missing features and few bug fixes. Khudos to the initial author (Stephen Quan) for sharing it as-is.\r Forum Thread (answer): https://stackoverflow.com/a/12171836/1751166",
+  "main": "index.vbs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pravynandas/JSONToXML.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pravynandas/JSONToXML/issues"
+  },
+  "homepage": "https://github.com/pravynandas/JSONToXML#readme"
+}
