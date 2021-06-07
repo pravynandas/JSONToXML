@@ -8,19 +8,32 @@
 ' Visit: https://stackoverflow.com/a/12171836/1751166
 ' Author: https://stackoverflow.com/users/881441/stephen-quan
 ' ==============================================================================================
-Class JSONToXML
-  
-  Const stateRoot = 0
-  Const stateNameQuoted = 1
-  Const stateNameFinished = 2
-  Const stateValue = 3
-  Const stateValueQuoted = 4
-  Const stateValueQuotedEscaped = 5
-  Const stateValueQuotedEscapedHex = 6
-  Const stateValueUnquoted = 7
-  Const stateValueUnquotedEscaped = 8
 
-  Public Function Convert(json)
+Class JSONToXML
+
+  Private stateRoot
+  Private stateNameQuoted
+  Private stateNameFinished
+  Private stateValue
+  Private stateValueQuoted
+  Private stateValueQuotedEscaped
+  Private stateValueQuotedEscapedHex
+  Private stateValueUnquoted
+  Private stateValueUnquotedEscaped
+
+  Private Sub Class_Initialize
+    stateRoot = 0
+    stateNameQuoted = 1
+    stateNameFinished = 2
+    stateValue = 3
+    stateValueQuoted = 4
+    stateValueQuotedEscaped = 5
+    stateValueQuotedEscapedHex = 6
+    stateValueUnquoted = 7
+    stateValueUnquotedEscaped = 8
+  End Sub
+
+  Public Function toXml(json)
     Dim dom, xmlElem, i, ch, state, name, value, sHex
     Set dom = CreateObject("Microsoft.XMLDOM")
     state = stateRoot
@@ -154,10 +167,10 @@ Class JSONToXML
         state = stateValueUnquoted
       End Select
     Next
-    Set JSONToXML = dom
+    Set toXml = dom
   End Function
 
-  Function XMLCreateChild(xmlParent, tagName)
+  Private Function XMLCreateChild(xmlParent, tagName)
     Dim xmlChild
     If xmlParent is Nothing Then
       Set XMLCreateChild = Nothing
