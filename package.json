@@ -1,6 +1,6 @@
 {
   "name": "JSONToXML",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JSONToXML is a function adapted from below forum thread and enhanced to have missing features and few bug fixes. Khudos to the initial author (Stephen Quan) for sharing it as-is.\r Forum Thread (answer): https://stackoverflow.com/a/12171836/1751166",
   "main": "index.vbs",
   "scripts": {
